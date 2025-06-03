@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Custom Marker AR</title>
+    <title>Custom Marker AR with Zoom</title>
     <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
     <script src="https://cdn.rawgit.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.min.js"></script>
     <style>
@@ -14,11 +14,11 @@
         <a-asset-item id="model" src="models/kaabah.glb"></a-asset-item>
       </a-assets>
 
-      <!-- Gunakan custom marker -->
-      <a-marker type="pattern" url="marker/pattern-marker.patt">
-        <a-entity 
-          gltf-model="#model" 
-          scale="0.5 0.5 0.5" 
+      <!-- Marker custom -->
+      <a-marker type="pattern" url="markers/logoku.patt">
+        <a-entity id="zoom-model"
+          gltf-model="#model"
+          scale="0.5 0.5 0.5"
           position="0 0 0"
           rotation="0 0 0">
         </a-entity>
@@ -26,5 +26,50 @@
 
       <a-entity camera></a-entity>
     </a-scene>
+
+    <script>
+      const model = document.getElementById('zoom-model');
+
+      let initialDistance = null;
+      let initialScale = 0.5;
+
+      // Fungsi untuk hitung jarak dua sentuhan
+      function getDistance(touches) {
+        const dx = touches[0].clientX - touches[1].clientX;
+        const dy = touches[0].clientY - touches[1].clientY;
+        return Math.sqrt(dx * dx + dy * dy);
+      }
+
+      document.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 2) {
+          initialDistance = getDistance(e.touches);
+          const scale = model.getAttribute('scale');
+          initialScale = scale.x; // karena uniform scale
+        }
+      });
+
+      document.addEventListener('touchmove', (e) => {
+        if (e.touches.length === 2 && initialDistance) {
+          const currentDistance = getDistance(e.touches);
+          let scaleFactor = currentDistance / initialDistance;
+          let newScale = initialScale * scaleFactor;
+
+          // Batas minimum dan maksimum zoom
+          newScale = Math.max(0.2, Math.min(3, newScale));
+
+          model.setAttribute('scale', {
+            x: newScale,
+            y: newScale,
+            z: newScale
+          });
+        }
+      });
+
+      document.addEventListener('touchend', (e) => {
+        if (e.touches.length < 2) {
+          initialDistance = null;
+        }
+      });
+    </script>
   </body>
 </html>
