@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Marker AR with AR.js</title>
+    <title>Custom Marker AR</title>
     <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
     <script src="https://cdn.rawgit.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.min.js"></script>
     <style>
@@ -11,15 +11,19 @@
   <body>
     <a-scene embedded arjs>
       <a-assets>
-        <a-asset-item id="model" src="models/Agama Islam _ Ka'bah.glb"></a-asset-item>
+        <a-asset-item id="model" src="models/kaabah.glb"></a-asset-item>
       </a-assets>
 
-      <!-- Gunakan marker preset Hiro -->
-      <a-marker preset="hiro">
-        <a-entity gltf-model="#model" scale="0.5 0.5 0.5" position="0 0 0"></a-entity>
+      <!-- Gunakan custom marker -->
+      <a-marker type="pattern" url="marker/pattern-marker.patt">
+        <a-entity 
+          gltf-model="#model" 
+          scale="0.5 0.5 0.5" 
+          position="0 0 0"
+          rotation="0 0 0">
+        </a-entity>
       </a-marker>
 
-      <!-- Kamera AR -->
       <a-entity camera></a-entity>
     </a-scene>
   </body>
