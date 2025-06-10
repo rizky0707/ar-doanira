@@ -1,75 +1,54 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Custom Marker AR with Zoom</title>
-    <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
-    <script src="https://cdn.rawgit.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.min.js"></script>
-    <style>
-      body { margin: 0; overflow: hidden; }
-    </style>
-  </head>
-  <body>
-    <a-scene embedded arjs>
-      <a-assets>
-        <a-asset-item id="model" src="models/kaabah.glb"></a-asset-item>
-      </a-assets>
+<script src="https://cdn.jsdelivr.net/gh/aframevr/aframe@1.6.0/dist/aframe-master.min.js"></script>
+<script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
 
-      <!-- Marker custom -->
-      <a-marker type="pattern" url="marker/pattern-marker.patt">
-        <a-entity
-          gltf-model="#model"
-          scale="1 1 1"
-          position="0 0 0"
-          rotation="0 0 0">
-        </a-entity>
-      </a-marker>
+<style>
+  .arjs-loader {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
-      <a-entity camera></a-entity>
-    </a-scene>
+  .arjs-loader div {
+    text-align: center;
+    font-size: 1.25em;
+    color: white;
+  }
+</style>
 
-    <script>
-      const model = document.getElementById('zoom-model');
-
-      let initialDistance = null;
-      let initialScale = 0.5;
-
-      // Fungsi untuk hitung jarak dua sentuhan
-      function getDistance(touches) {
-        const dx = touches[0].clientX - touches[1].clientX;
-        const dy = touches[0].clientY - touches[1].clientY;
-        return Math.sqrt(dx * dx + dy * dy);
-      }
-
-      document.addEventListener('touchstart', (e) => {
-        if (e.touches.length === 2) {
-          initialDistance = getDistance(e.touches);
-          const scale = model.getAttribute('scale');
-          initialScale = scale.x; // karena uniform scale
-        }
-      });
-
-      document.addEventListener('touchmove', (e) => {
-        if (e.touches.length === 2 && initialDistance) {
-          const currentDistance = getDistance(e.touches);
-          let scaleFactor = currentDistance / initialDistance;
-          let newScale = initialScale * scaleFactor;
-
-          // Batas minimum dan maksimum zoom
-          newScale = Math.max(0.2, Math.min(3, newScale));
-
-          model.setAttribute('scale', {
-            x: newScale,
-            y: newScale,
-            z: newScale
-          });
-        }
-      });
-
-      document.addEventListener('touchend', (e) => {
-        if (e.touches.length < 2) {
-          initialDistance = null;
-        }
-      });
-    </script>
-  </body>
-</html>
+<body style="margin : 0px; overflow: hidden;">
+  <!-- minimal loader shown until image descriptors are loaded -->
+  <div class="arjs-loader">
+    <div>Loading, please wait...</div>
+  </div>
+  <a-scene
+    vr-mode-ui="enabled: false;"
+    renderer="logarithmicDepthBuffer: true; precision: medium;"
+    embedded
+    arjs="trackingMethod: best; sourceType: webcam;debugUIEnabled: false;"
+  >
+    <!-- we use cors proxy to avoid cross-origin problems ATTENTION! you need to set up your server -->
+    <a-nft
+      type="nft"
+      url="your-server/https://raw.githack.com/AR-js-org/AR.js/master/aframe/examples/image-tracking/nft/trex/trex-image/trex"
+      smooth="true"
+      smoothCount="10"
+      smoothTolerance=".01"
+      smoothThreshold="5"
+    >
+      <a-entity
+        gltf-model="your-server/https://doanira-ar.netlify.app/models/kaabah.glb"
+        scale="5 5 5"
+        position="150 300 -100"
+      >
+      </a-entity>
+    </a-nft>
+    <a-entity camera></a-entity>
+  </a-scene>
+</body>
