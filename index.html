@@ -1,6 +1,8 @@
+<!-- A-Frame and AR.js scripts -->
 <script src="https://cdn.jsdelivr.net/gh/aframevr/aframe@1.6.0/dist/aframe-master.min.js"></script>
 <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
 
+<!-- Loader style -->
 <style>
   .arjs-loader {
     height: 100%;
@@ -22,33 +24,38 @@
   }
 </style>
 
-<body style="margin : 0px; overflow: hidden;">
-  <!-- minimal loader shown until image descriptors are loaded -->
+<!-- Body -->
+<body style="margin: 0; overflow: hidden;">
+  <!-- Loader while marker data loads -->
   <div class="arjs-loader">
     <div>Loading, please wait...</div>
   </div>
+
+  <!-- AR Scene -->
   <a-scene
     vr-mode-ui="enabled: false;"
     renderer="logarithmicDepthBuffer: true; precision: medium;"
     embedded
-    arjs="trackingMethod: best; sourceType: webcam;debugUIEnabled: false;"
+    arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
   >
-    <!-- we use cors proxy to avoid cross-origin problems ATTENTION! you need to set up your server -->
+    <!-- NFT Marker - MUST point to base URL of marker descriptor files -->
     <a-nft
       type="nft"
-      url="https://doanira-ar.netlify.app/marker/kaabah.png"
+      url="https://doanira-ar.netlify.app/marker/kaabah"
       smooth="true"
       smoothCount="10"
-      smoothTolerance=".01"
+      smoothTolerance="0.01"
       smoothThreshold="5"
     >
+      <!-- 3D Model -->
       <a-entity
         gltf-model="https://doanira-ar.netlify.app/models/kaabah.glb"
         scale="5 5 5"
         position="150 300 -100"
-      >
-      </a-entity>
+      ></a-entity>
     </a-nft>
+
+    <!-- Camera -->
     <a-entity camera></a-entity>
   </a-scene>
 </body>
