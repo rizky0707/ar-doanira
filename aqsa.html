@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>AR DOANIRA - KAABAH</title>
+    <title>AR DOANIRA - AQSA</title>
     <script src="https://cdn.jsdelivr.net/gh/aframevr/aframe@1.6.0/dist/aframe-master.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
   </head>
@@ -16,16 +16,16 @@
       <!-- Marker -->
       <a-marker
         type="pattern"
-        url="marker/pattern-kaabah.patt"
+        url="marker/pattern-aqsa.patt"
         smooth="true"
         smoothCount="10"
         smoothTolerance="0.01"
         smoothThreshold="5"
-        id="kaabah-marker"
+        id="aqsa-marker"
       >
         <!-- Model 3D -->
         <a-entity
-          gltf-model="models/kaabah.glb"
+          gltf-model="models/aqsa.glb"
           scale="5 5 5"
           position="0 0 0"
         ></a-entity>
@@ -33,7 +33,7 @@
         <!-- Audio -->
         <a-sound
           id="kaabah-audio"
-          src="url(audio/kaabah.mp3)"
+          src="url(audio/aqsa.mp3)"
           autoplay="false"
           loop="false"
           volume="5"
@@ -46,8 +46,8 @@
 
     <script>
       // Auto play audio when marker is detected
-      const marker = document.querySelector("#kaabah-marker");
-      const sound = document.querySelector("#kaabah-audio");
+      const marker = document.querySelector("#aqsa-marker");
+      const sound = document.querySelector("#aqsa-audio");
 
       marker.addEventListener("markerFound", () => {
         console.log("Marker found");
