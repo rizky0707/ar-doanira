@@ -2,37 +2,62 @@
 <html>
   <head>
     <title>AR DOANIRA - MAKKAH</title>
-<script src="https://cdn.jsdelivr.net/gh/aframevr/aframe@1.6.0/dist/aframe-master.min.js"></script>
-<script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
-    
+    <script src="https://cdn.jsdelivr.net/gh/aframevr/aframe@1.6.0/dist/aframe-master.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
   </head>
-  <!-- A-Frame and AR.js scripts -->
 
-<!-- AR Scene -->
-<a-scene
-  vr-mode-ui="enabled: false;"
-  renderer="logarithmicDepthBuffer: true; precision: medium;"
-  embedded
-  arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
->
-  <!-- Custom Pattern Marker -->
-  <a-marker
-    type="pattern"
-    url="marker/pattern-kaabah.patt"
-    smooth="true"
-    smoothCount="10"
-    smoothTolerance="0.01"
-    smoothThreshold="5"
-  >
-    <!-- 3D Model -->
-    <a-entity
-      gltf-model="models/kaabah.glb"
-      scale="5 5 5"
-      position="0 0 0"
-    ></a-entity>
-  </a-marker>
+  <body style="margin: 0; overflow: hidden;">
+    <a-scene
+      vr-mode-ui="enabled: false;"
+      renderer="logarithmicDepthBuffer: true; precision: medium;"
+      embedded
+      arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
+    >
+      <!-- Marker -->
+      <a-marker
+        type="pattern"
+        url="marker/pattern-kaabah.patt"
+        smooth="true"
+        smoothCount="10"
+        smoothTolerance="0.01"
+        smoothThreshold="5"
+        id="kaabah-marker"
+      >
+        <!-- Model 3D -->
+        <a-entity
+          gltf-model="models/kaabah.glb"
+          scale="5 5 5"
+          position="0 0 0"
+        ></a-entity>
 
-  <!-- Camera -->
-  <a-entity camera></a-entity>
-</a-scene>
+        <!-- Audio -->
+        <a-sound
+          id="kaabah-audio"
+          src="url(audio/kaabah.mp3)"
+          autoplay="false"
+          loop="false"
+          volume="5"
+        ></a-sound>
+      </a-marker>
+
+      <!-- Kamera -->
+      <a-entity camera></a-entity>
+    </a-scene>
+
+    <script>
+      // Auto play audio when marker is detected
+      const marker = document.querySelector("#kaabah-marker");
+      const sound = document.querySelector("#kaabah-audio");
+
+      marker.addEventListener("markerFound", () => {
+        console.log("Marker found");
+        sound.components.sound.playSound();
+      });
+
+      marker.addEventListener("markerLost", () => {
+        console.log("Marker lost");
+        sound.components.sound.stopSound();
+      });
+    </script>
+  </body>
 </html>
